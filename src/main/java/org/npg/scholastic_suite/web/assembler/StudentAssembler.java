@@ -17,7 +17,8 @@ public class StudentAssembler implements RepresentationModelAssembler<Student, E
     @Nonnull
     public EntityModel<Student> toModel(@Nonnull Student entity) {
         return EntityModel.of(entity,
-                linkTo(methodOn(StudentController.class).getOneStudentById(entity.getId())).withSelfRel(),
+                linkTo(methodOn(StudentController.class).getStudentById(entity.getId())).withSelfRel(),
+                linkTo(methodOn(StudentController.class).getStudentProgram(entity.getId())).withRel("program"),
                 linkTo(methodOn(StudentController.class).getAllStudents()).withRel("students")
         );
     }
@@ -26,5 +27,10 @@ public class StudentAssembler implements RepresentationModelAssembler<Student, E
     @Nonnull
     public CollectionModel<EntityModel<Student>> toCollectionModel(@Nonnull Iterable<? extends Student> entities) {
         return RepresentationModelAssembler.super.toCollectionModel(entities);
+        // CollectionModel<EntityModel<Student>> collectionModel = RepresentationModelAssembler.super.toCollectionModel(entities);
+        // CollectionModel<EntityModel<Student>> list = CollectionModel.of(collectionModel.getContent());
+        // list.add(collectionModel.getLinks());
+        // list.add(Link.of(linkTo(StudentController.class).toUri().toString(), "self"));
+        // return list;
     }
 }

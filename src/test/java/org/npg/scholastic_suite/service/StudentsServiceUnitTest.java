@@ -111,7 +111,9 @@ public class StudentsServiceUnitTest {
         Student mockStudent = TestHelper.generateStudent(true);
         when(studentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        NoSuchElementException ex = assertThrows(NoSuchElementException.class, () -> { studentService.updateStudent(1L, mockStudent); });
+        NoSuchElementException ex = assertThrows(NoSuchElementException.class, () -> {
+            studentService.updateStudent(1L, mockStudent);
+        });
         assertEquals(ErrorMessages.DOESNT_EXIST, ex.getMessage());
         verify(studentRepository).findById(anyLong());
     }

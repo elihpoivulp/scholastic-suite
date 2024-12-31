@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Profile("test")
-@EnableTransactionManagement
 public class StudentsServiceIntegrationTest {
     @Autowired
     private StudentService studentService;
@@ -71,7 +69,7 @@ public class StudentsServiceIntegrationTest {
         ConstraintViolationException ex1 = assertThrows(ConstraintViolationException.class, () -> {
             studentService.createStudent(student);
         });
-        for(ConstraintViolation<?> cv : ex1.getConstraintViolations()) {
+        for (ConstraintViolation<?> cv : ex1.getConstraintViolations()) {
             assertEquals("email", cv.getPropertyPath().toString());
         }
 
@@ -80,7 +78,7 @@ public class StudentsServiceIntegrationTest {
         ConstraintViolationException ex2 = assertThrows(ConstraintViolationException.class, () -> {
             studentService.createStudent(student);
         });
-        for(ConstraintViolation<?> cv : ex2.getConstraintViolations()) {
+        for (ConstraintViolation<?> cv : ex2.getConstraintViolations()) {
             assertEquals("phone", cv.getPropertyPath().toString());
         }
 
@@ -89,7 +87,7 @@ public class StudentsServiceIntegrationTest {
         ConstraintViolationException ex3 = assertThrows(ConstraintViolationException.class, () -> {
             studentService.createStudent(student);
         });
-        for(ConstraintViolation<?> cv : ex3.getConstraintViolations()) {
+        for (ConstraintViolation<?> cv : ex3.getConstraintViolations()) {
             assertThat(cv.getPropertyPath().toString(), anyOf(is("email"), is("phone")));
         }
     }
@@ -112,7 +110,7 @@ public class StudentsServiceIntegrationTest {
         ConstraintViolationException ex = assertThrows(ConstraintViolationException.class, () -> {
             studentService.updateStudent(1L, student);
         });
-        for(ConstraintViolation<?> cv : ex.getConstraintViolations()) {
+        for (ConstraintViolation<?> cv : ex.getConstraintViolations()) {
             assertEquals("email", cv.getPropertyPath().toString());
         }
     }

@@ -1,7 +1,8 @@
 package org.npg.scholastic_suite.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.npg.scholastic_suite.constants.ErrorMessages;
 import org.npg.scholastic_suite.domain.Student;
 import org.npg.scholastic_suite.util.TestHelper;
@@ -15,6 +16,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class StudentControllerTest extends BaseControllerTestConfig {
     private static final String STUDENTS_PATH = "/students";
+
+    protected static String asJsonString(final Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     @Order(1)
@@ -61,7 +71,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     @Test
     @Order(3)
     public void when_addStudent_then_return_201() throws Exception {
-        Student student = TestHelper.generateStudent();
+        Student student = TestHelper.generateStudent(false);
 
         mockMvc.perform(post("/students")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,14 +135,5 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     @Order(9)
     public void when_getStudentById_but_student_doesnt_exist_then_return_404() throws Exception {
         mockMvc.perform(get("/students/1")).andExpect(status().isNotFound()).andDo(print());
-    }
-
-    protected static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
