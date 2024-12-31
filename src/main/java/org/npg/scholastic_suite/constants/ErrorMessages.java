@@ -9,4 +9,5 @@ public class ErrorMessages {
     public static final String INVALID_PHONE = "Please enter a valid phone number.";
     public static final String EMAIL_CHAR_SIZE_RANGE = "Please enter a value that is between 6 and 50 characters long.";
     public static final String GLOBAL_CHAR_SIZE_RANGE = "Please enter a value that is between 2 and 50 characters long.";
+    public static final String ATTEMPT_FAILED = "An attempt was made to delete entity {} with ID {}, but the entity does not exist.";
 }

@@ -55,7 +55,7 @@ public class StudentService {
             studentRepository.deleteById(id);
             logger.warn("Student with id {} has been deleted.", id);
         } catch (NoSuchElementException e) {
-            logger.info("An attempt to delete a student with id {} was attempted, but student doesn't exist. ", id);
+            logger.warn(ErrorMessages.ATTEMPT_FAILED, "student", id);
         }
     }
 }
