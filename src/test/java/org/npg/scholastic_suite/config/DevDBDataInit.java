@@ -26,7 +26,7 @@ public class DevDBDataInit implements CommandLineRunner {
 
         Program program = programRepository.save(new Program("Bachelor of Science in Computer Science", "BSCS"));
         programRepository.save(new Program("Bachelor of Science in Business Administration", "BSBA"));
-        logger.info("1 program created");
+        logger.info("2 programs created");
 
         studentRepository.save(new Student("John", "Doe", "john@email.com", "09555555555", program));
         studentRepository.save(new Student("Jane", "Doe", "jane@email.com", "+639888888888", program));
