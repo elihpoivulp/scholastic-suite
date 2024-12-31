@@ -29,7 +29,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     @Test
     @Order(1)
     public void when_getAllStudents_then_return_student_list() throws Exception {
-        mockMvc.perform(get("/students"))
+        mockMvc.perform(get(STUDENTS_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON))
                 .andExpectAll(
@@ -54,7 +54,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     @Order(2)
     public void when_getStudentById_then_return_student() throws Exception {
         long id = 1L;
-        mockMvc.perform(get("/students/" + id))
+        mockMvc.perform(get(STUDENTS_PATH + "/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaTypes.HAL_JSON))
                 .andExpectAll(
@@ -73,7 +73,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     public void when_addStudent_then_return_201() throws Exception {
         Student student = TestHelper.generateStudent(false);
 
-        mockMvc.perform(post("/students")
+        mockMvc.perform(post(STUDENTS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(student)))
                 .andExpect(status().isCreated());
@@ -84,7 +84,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     public void when_addStudent_and_data_is_invalid_then_return_400() throws Exception {
         Student student = TestHelper.generateStudent(false);
         student.setEmail("invalid-email");
-        mockMvc.perform(post("/students")
+        mockMvc.perform(post(STUDENTS_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(student)))
                 .andExpect(jsonPath("$.message", is(ErrorMessages.VALIDATION_FAILED)))
@@ -96,7 +96,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     public void when_updateStudent_then_return_204() throws Exception {
         Student student = TestHelper.generateStudent(false);
         student.setEmail("new@email.com");
-        mockMvc.perform(put("/students/1")
+        mockMvc.perform(put(STUDENTS_PATH + "/" + 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(student)))
                 .andExpect(status().isNoContent());
@@ -107,7 +107,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     public void when_updateStudent_and_data_is_invalid_then_return_400() throws Exception {
         Student student = TestHelper.generateStudent(false);
         student.setPhone("invalid-phone");
-        mockMvc.perform(put("/students/1")
+        mockMvc.perform(put(STUDENTS_PATH + "/" + 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(student)))
                 .andExpect(jsonPath("$.message", is(ErrorMessages.VALIDATION_FAILED)))
@@ -119,7 +119,7 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     public void when_updateStudent_and_student_doesnt_exist_then_return_404() throws Exception {
         Student student = TestHelper.generateStudent(false);
         student.setEmail("new@email.com");
-        mockMvc.perform(put("/students/999999")
+        mockMvc.perform(put(STUDENTS_PATH + "/" + 99999)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(student)))
                 .andExpect(status().isNotFound());
@@ -128,12 +128,12 @@ public class StudentControllerTest extends BaseControllerTestConfig {
     @Test
     @Order(8)
     public void when_deleteStudent_then_return_204() throws Exception {
-        mockMvc.perform(delete("/students/1")).andExpect(status().isNoContent());
+        mockMvc.perform(delete(STUDENTS_PATH + "/" + 1)).andExpect(status().isNoContent());
     }
 
     @Test
     @Order(9)
     public void when_getStudentById_but_student_doesnt_exist_then_return_404() throws Exception {
-        mockMvc.perform(get("/students/1")).andExpect(status().isNotFound()).andDo(print());
+        mockMvc.perform(get(STUDENTS_PATH + "/" + 1)).andExpect(status().isNotFound()).andDo(print());
     }
 }
