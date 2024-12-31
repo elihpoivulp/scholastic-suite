@@ -28,7 +28,7 @@ public class StudentsServiceIntegrationTest {
     private StudentService studentService;
 
     @Test
-    public void testGetAllStudentsShouldReturnAllStudents() {
+    public void when_getAllStudents_then_return_student_list() {
         List<Student> students = studentService.getAllStudents();
 
         Student student1 = students.getFirst();
@@ -40,7 +40,7 @@ public class StudentsServiceIntegrationTest {
     }
 
     @Test
-    public void testGetStudentByIdShouldReturnStudent() {
+    public void when_getStudentById_then_return_student() {
         Student student = studentService.getStudentById(1);
         assertNotNull(student);
         assertEquals(1L, student.getId());
@@ -48,7 +48,7 @@ public class StudentsServiceIntegrationTest {
     }
 
     @Test
-    public void testNonExistentGetStudentByIdShouldReturnNoSuchElementException() {
+    public void when_getStudentById_but_student_doesnt_exist_then_throw_NoSuchElementException() {
         NoSuchElementException ex = assertThrows(NoSuchElementException.class, () -> {
             studentService.getStudentById(999999L);
         });
@@ -57,7 +57,7 @@ public class StudentsServiceIntegrationTest {
 
     @Test
     @DirtiesContext
-    public void testCreateStudentShouldReturnStudent() {
+    public void when_addStudent_then_return_student() {
         Student student = TestHelper.generateStudent(false);
         Student savedStudent = studentService.createStudent(student);
         assertNotNull(savedStudent);
@@ -65,7 +65,7 @@ public class StudentsServiceIntegrationTest {
     }
 
     @Test
-    public void testCreateStudentWithInvalidConstraintsShouldReturnConstraintViolationException() {
+    public void when_createStudent_and_data_is_invalid_then_throw_ConstraintViolationException() {
         Student student = TestHelper.generateStudent(false);
         student.setEmail("invalid-email");
         ConstraintViolationException ex1 = assertThrows(ConstraintViolationException.class, () -> {
@@ -96,7 +96,7 @@ public class StudentsServiceIntegrationTest {
 
     @Test
     @DirtiesContext
-    public void testUpdateStudentShouldReturnStudent() throws Throwable {
+    public void when_updateStudent_should_return_student() throws Throwable {
         Student student = TestHelper.generateStudent(false);
         student.setFirstName("updatedFirstName");
         Student updatedStudent = studentService.updateStudent(1L, student);
@@ -105,7 +105,7 @@ public class StudentsServiceIntegrationTest {
     }
 
     @Test
-    public void testUpdateStudentWithInvalidConstraintsShouldReturnConstraintViolationException() {
+    public void when_updateStudent_and_data_is_invalid_then_throw_ConstraintViolationException() {
         Student student = TestHelper.generateStudent(false);
         student.setEmail("invalid-email");
 
@@ -118,7 +118,7 @@ public class StudentsServiceIntegrationTest {
     }
 
     @Test
-    public void testNonExistentUpdateStudentShouldReturnNoSuchElementException() {
+    public void when_updateStudent_and_student_doesnt_exist_then_throw_NoSuchElementException() {
         Student student = TestHelper.generateStudent(false);
         NoSuchElementException ex = assertThrows(NoSuchElementException.class, () -> {
             studentService.updateStudent(99999999L, student);
@@ -128,7 +128,7 @@ public class StudentsServiceIntegrationTest {
 
     @Test
     @DirtiesContext
-    public void testDeleteStudentShouldDeleteStudent() {
+    public void when_deleteStudent_should_delete_student() {
         studentService.deleteStudent(1L);
 
         assertThrows(NoSuchElementException.class, () -> {

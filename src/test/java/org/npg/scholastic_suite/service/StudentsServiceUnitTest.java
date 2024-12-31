@@ -7,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.npg.scholastic_suite.constants.ErrorMessages;
+import org.npg.scholastic_suite.domain.Program;
 import org.npg.scholastic_suite.domain.Student;
+import org.npg.scholastic_suite.repo.ProgramRepository;
 import org.npg.scholastic_suite.repo.StudentRepository;
 import org.npg.scholastic_suite.util.TestHelper;
 
@@ -22,9 +24,12 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StudentsServiceTest {
+public class StudentsServiceUnitTest {
     @Mock
     private StudentRepository studentRepository;
+
+    @Mock
+    private ProgramRepository programRepository;
 
     @InjectMocks
     private StudentService studentService;
@@ -35,7 +40,7 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testGetAllStudentsShouldReturnAllStudents() {
+    public void when_getAllStudents_then_return_student_list() {
         List<Student> students = new ArrayList<>();
         students.add(TestHelper.generateStudent());
         students.add(TestHelper.generateStudent());
@@ -58,7 +63,7 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testGetStudentByIdShouldReturnStudent() {
+    public void when_getStudentById_then_return_student() {
         Student mockStudent = TestHelper.generateStudent();
         when(studentRepository.findById(mockStudent.getId())).thenReturn(Optional.of(mockStudent));
 
@@ -72,7 +77,7 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testNonExistentGetStudentByIdShouldThrowNoSuchElementException() {
+    public void when_getStudentById_but_student_doesnt_exist_then_throw_NoSuchElementException() {
         when(studentRepository.findById(anyLong())).thenReturn(Optional.empty());
         NoSuchElementException ex = assertThrows(NoSuchElementException.class, () -> {
             studentService.getStudentById(anyLong());
@@ -83,15 +88,17 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testCreateStudentShouldReturnStudent() {
+    public void when_addStudent_then_return_student() {
         Student mockStudent = TestHelper.generateStudent(false);
+        Program program = TestHelper.generateProgram(true);
+        when(programRepository.findById(program.getId())).thenReturn(Optional.of(program));
         when(studentService.createStudent(mockStudent)).thenReturn(mockStudent);
         studentService.createStudent(mockStudent);
         verify(studentRepository).save(mockStudent);
     }
 
     @Test
-    public void testUpdateStudentShouldUpdateStudent() throws Throwable {
+    public void when_updateStudent_should_update_student() throws Throwable {
         Student mockStudent = TestHelper.generateStudent(true);
         when(studentRepository.findById(anyLong())).thenReturn(Optional.of(mockStudent));
         studentService.updateStudent(1, mockStudent);
@@ -100,7 +107,7 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testNonExistentUpdateStudentShouldThrowNoSuchElementException() {
+    public void when_updateStudent_and_student_doesnt_exist_then_throw_NoSuchElementException() {
         Student mockStudent = TestHelper.generateStudent(true);
         when(studentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -110,14 +117,14 @@ public class StudentsServiceTest {
     }
 
     @Test
-    public void testDeleteStudentShouldDeleteStudent() {
+    public void when_deleteStudent_should_delete_student() {
         when(studentRepository.findById(anyLong())).thenReturn(Optional.of(TestHelper.generateStudent()));
         studentService.deleteStudent(1);
         verify(studentRepository).deleteById(anyLong());
     }
 
     @Test
-    public void testNonExistentDeleteStudentShouldNoNothing() {
+    public void when_deleteStudent_and_student_doesnt_exist_then_do_nothing() {
         studentService.deleteStudent(1);
         verify(studentRepository, never()).deleteById(anyLong());
     }

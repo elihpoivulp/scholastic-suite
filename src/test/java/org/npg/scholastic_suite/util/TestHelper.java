@@ -1,5 +1,6 @@
 package org.npg.scholastic_suite.util;
 
+import org.npg.scholastic_suite.domain.Program;
 import org.npg.scholastic_suite.domain.Student;
 
 public class TestHelper {
@@ -11,12 +12,29 @@ public class TestHelper {
     }
 
     public static Student generateStudent(boolean withId) {
-        Student student = new Student(addSuffix("Juan"), addSuffix("Dela Cruz"), addSuffix("juandelacruz@email.com"), "09666665552");
+        Program program = new Program("Bachelor of Science in Computer Science", "BSCS");
+        program.setId(1L);
+        Student student = new Student(addSuffix("Juan"), addSuffix("Dela Cruz"), addSuffix("juandelacruz@email.com"), "09666665552", program);
         if (withId) {
             student.setId((long) counter);
             incrementCounter();
         }
         return student;
+    }
+
+    public static Program generateProgram() {
+        return generateProgram(true);
+    }
+
+    public static Program generateProgram(boolean withId) {
+        Program program = new Program("Bachelor of Science in Computer Science", "BSCS");
+        Student student = new Student(addSuffix("Juan"), addSuffix("Dela Cruz"), addSuffix("juandelacruz@email.com"), "09666665552", program);
+        if (withId) {
+            program.setId((long) counter);
+            incrementCounter();
+        }
+        return program;
+
     }
 
     public static String addSuffix(String str) {
